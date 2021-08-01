@@ -8,8 +8,8 @@
 <script>
 async function init() {
     data  = await d3.csv("https://nykznykz.github.io/twitch_data.csv");
-    xdomain = [0,1000000];
-    xrange = [0,3000];
+    xdomain = [0,500000];
+    xrange = [0,1000];
     ydomain = [0,10];
     yrange = [100,700];
     margin = 60
@@ -54,9 +54,19 @@ async function init() {
     })
         
     d3.select('svg')
-                .append('g')
-                .attr("id", "chart")
-                // .attr('transform','translate(' + margin + ',' + margin + ')')
+        .append('g')
+        .attr("id", "chart")
+        // .attr('transform','translate(' + margin + ',' + margin + ')')
+
+
+    d3.select("#chart")
+        .append("g")
+        .attr("transform","translate("+20+","+0+")")
+        .call(d3.axisLeft(ys).tickFormat(""));
+    d3.select("#chart")
+        .append("g")
+        .attr("transform","translate("+20+","+(700)+")")
+        .call(d3.axisBottom(xs));
 
     select_year = 2016
     refresh_chart()
