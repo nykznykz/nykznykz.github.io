@@ -2,40 +2,73 @@
 <script src='https://d3js.org/d3.v5.min.js'></script>
 <style> circle {fill: lightblue; stroke: black;} </style>
 <body onload='init()'>
-<svg width=300 height=300>
-</svg>
+    <h1> Most Watched Games on Twitch by the Years</h1><br/>
+    <svg width=10000 height=10000>
+    </svg>
 <script>
 async function init() {
-const data = await d3.csv("https://flunky.github.io/cars2017.csv");
-var x = d3.scaleLog().domain([10,150]).range([0,1000]).base(10);
-var y = d3.scaleLog().domain([10,150]).range([1000,0]).base(10);
+    const data = await d3.csv("https://nykznykz.github.io/twitch_data.csv");
+    xdomain = [0,1000000];
+    xrange = [0,200];
+    ydomain = [0,10];
+    yrange = [100,250];
 
-d3.select("svg") 
-.attr("width",1000 + 2*50)
-.attr("height",1000 + 2*50)
-.append("g")
-.attr("transform","translate("+50+","+50+")")
-.selectAll("circle")
-.data(data)
-.enter().append("circle")
-.attr('cx',function(d) {return x(d.AverageCityMPG);})
-.attr('cy',function(d) {return y(d.AverageHighwayMPG);})
-.attr('r', function(d) {return 2+parseInt(d.EngineCylinders);})
+    xs = d3.scaleLinear().domain(xdomain).range(xrange);
+    ys = d3.scaleLinear().domain(ydomain).range(yrange);
 
-d3.select("svg")
-.append("g")
-.attr("transform","translate("+50+","+50+")")
-.call(d3.axisLeft(y)
-.tickValues([10, 20, 50, 100])
-.tickFormat(d3.format("~s")) );
-d3.select("svg")
-.append("g")
-.attr("transform","translate("+50+","+(1000+50)+")")
-.call(d3.axisBottom(x)
-.tickValues([10, 20, 50, 100])
-.tickFormat(d3.format("~s")) );
+    d3.select('svg')
+    .selectAll('rect')
+    .data(data)
+    .enter()
+    .append('rect')
+    .attr("id", "bar")
+    .attr('x',20)
+    .attr('y',function(d,i) {return ys(i);})
+    .attr('width',function(d,i) {return 300;})
+    .attr('height',10)
+    .attr('fill', "purple")
+    
+    // year filter buttons
+    years = [2016,2017,2018,2019,2020,2021]
+    d3.select("svg")
+        .selectAll("g")
+        .data(years)
+        .enter()
+        .append("g")
+        .attr("transform", function(d, i) { return "translate(" + (i*58) + ",20)"; })
+        .append("text").text(function(d,i){return(years[i])})
+
+    d3.select("svg")
+    .selectAll("g")
+    .each(function(d, i)
+    {
+        d3.select(this).append("rect")
+            .attr("id", "year")
+            .attr('x', -5)
+            .attr('y', -15)
+            .attr('opacity', .2)
+            .attr('width', 55)
+            .attr('height', 20)
+            .attr('stroke', 'black')
+            .attr('fill', "purple")
+            .on('click', function(d,i)
+            {
+                d3.selectAll("rect[id='year']").attr("fill", "purple")
+
+                d3.select(this).attr("fill",  "blue")
+                select_year = Number(d)
+                plot_points()
+            })
+    })
+
 }
+
+function plot_points(){
+
+d3.selectAll("#bar").remove()
+
+}
+    
 </script>
 </body>
 </html>
-
