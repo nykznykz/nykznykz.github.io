@@ -9,24 +9,14 @@
 async function init() {
     data  = await d3.csv("https://nykznykz.github.io/twitch_data.csv");
     xdomain = [0,1000000];
-    xrange = [0,200];
+    xrange = [0,3000];
     ydomain = [0,10];
-    yrange = [100,1000];
+    yrange = [100,300];
     margin = 60
     xs = d3.scaleLinear().domain(xdomain).range(xrange);
     ys = d3.scaleLinear().domain(ydomain).range(yrange);
 
-    d3.select('svg')
-    .selectAll('rect')
-    .data(data)
-    .enter()
-    .append('rect')
-    .attr("id", "bar")
-    .attr('x',20)
-    .attr('y',function(d,i) {return ys(i);})
-    .attr('width',function(d,i) {return 300;})
-    .attr('height',10)
-    .attr('fill', "purple")
+
     
     // year filter buttons
     years = [2016,2017,2018,2019,2020,2021]
@@ -35,11 +25,12 @@ async function init() {
         .data(years)
         .enter()
         .append("g")
-        .attr("transform", function(d, i) { return "translate(" + (i*58) + ",20)"; })
+        .attr("transform", function(d, i) { return "translate(" + (i*margin) + ",20)"; })
+        .attr("id","button")
         .append("text").text(function(d,i){return(years[i])})
 
     d3.select("svg")
-    .selectAll("g")
+    .selectAll("#button")
     .each(function(d, i)
     {
         d3.select(this).append("rect")
@@ -61,32 +52,67 @@ async function init() {
                 refresh_chart()
             })
     })
+        
+    d3.select('svg')
+                .append('g')
+                .attr("id", "chart")
+                // .attr('transform','translate(' + margin + ',' + margin + ')')
+
+    select_year = 2016
+    refresh_chart()
+    
 
 }
 
 function refresh_chart(){
 
     d3.selectAll("#bar").remove()
+    d3.selectAll("#bar").remove()
     console.log(select_year)
     selected_data = data.filter(function(e){return (e.Year==select_year)})
     console.log(selected_data)
 
-    d3.select('svg')
-                .append('g')
-                .attr("id", "chart")
-                .attr('transform','translate(' + margin + ',' + margin + ')')
 
-    d3.select('#chart')
+
+    // d3.select('#chart')
+    //     .selectAll('rect')
+    //     .data(selected_data)
+    //     .enter()
+    //     .append('rect')
+    //     .attr("id", "bar")
+    //     .attr('x',20)
+    //     .attr('y',function(d,i) {return ys(i);})
+    //     .attr('width',function(d,i) {return 100;})
+    //     .attr('height',10)
+    //     .attr('fill', "purple")
+    // d3.selectAll('#chart')
+    //     .selectAll('text')
+    //     .data(selected_data)
+    //     .enter()
+    //     .append("text")
+    //     .text(function(d){return d.Game})
+
+
+    elem =  d3.select('#chart')
         .selectAll('rect')
         .data(selected_data)
-        .enter()
-        .append('rect')
-        .attr("id", "bar")
+
+    elemEnter = elem.enter()
+    .append("g")
+    .attr("id", "bar")
+
+    elemEnter.append('rect')
         .attr('x',20)
         .attr('y',function(d,i) {return ys(i);})
-        .attr('width',function(d,i) {return 100;})
+        .attr('width',function(d,i) {return xs(d.Avg_viewers);})
         .attr('height',10)
         .attr('fill', "purple")
+
+    elemEnter.append("text")
+        .attr("dx", function(d){return 20})
+        .attr('dy',function(d,i) {return ys(i);})
+        .text(function(d){return d.Game})
+    
 }
 </script>
 </body>
