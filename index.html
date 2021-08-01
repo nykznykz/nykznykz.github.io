@@ -1,10 +1,21 @@
-<html>
 <script src='https://d3js.org/d3.v5.min.js'></script>
-<style> circle {fill: lightblue; stroke: black;} </style>
+<style>
+#tooltip {
+    opacity: 0;
+    position: absolute;
+    text-align: center;
+    width: 400px;
+    height: 40px;
+    background: lightgray;
+    border: 0px;
+}
+</style>
+<html>
 <body onload='init()'>
     <h1> Most Watched Games on Twitch by the Years</h1><br/>
     <svg width=10000 height=10000>
     </svg>
+    <div id="tooltip" opacity=0></div>
 <script>
 async function init() {
     data  = await d3.csv("https://nykznykz.github.io/twitch_data.csv");
@@ -25,7 +36,7 @@ async function init() {
         .data(years)
         .enter()
         .append("g")
-        .attr("transform", function(d, i) { return "translate(" + (i*margin) + ",20)"; })
+        .attr("transform", function(d, i) { return "translate(" + (i*margin +300) + ",20)"; })
         .attr("id","button")
         .append("text").text(function(d,i){return(years[i])})
 
@@ -61,11 +72,11 @@ async function init() {
 
     d3.select("#chart")
         .append("g")
-        .attr("transform","translate("+20+","+0+")")
+        .attr("transform","translate("+300+","+0+")")
         .call(d3.axisLeft(ys).tickFormat(""));
     d3.select("#chart")
         .append("g")
-        .attr("transform","translate("+20+","+(700)+")")
+        .attr("transform","translate("+300+","+(700)+")")
         .call(d3.axisBottom(xs));
 
     select_year = 2016
@@ -102,7 +113,6 @@ function refresh_chart(){
     //     .append("text")
     //     .text(function(d){return d.Game})
 
-
     elem =  d3.select('#chart')
         .selectAll('rect')
         .data(selected_data)
@@ -111,18 +121,28 @@ function refresh_chart(){
     .append("g")
     .attr("id", "bar")
 
+    tooltip = d3.select("#tooltip")
+
     elemEnter.append('rect')
-        .attr('x',20)
+        .attr('x',300)
         .attr('y',function(d,i) {return ys(i);})
         .attr('width',function(d,i) {return xs(d.Avg_viewers);})
         .attr('height',30)
         .attr('fill', "lightblue")
+        .on("mouseover", function(d,i) {
+            tooltip.style("opacity",1)
+            .style("left",(d3.event.pageX) +"px")
+            .style("top",(d3.event.pageY) +"px")
+            .html("Average Number of Viewers: " + parseInt(d.Avg_viewers))
+        })
+        .on("mouseout", function(){tooltip.style("opacity",0)})
 
     elemEnter.append("text")
         .attr("dx", function(d){return 20})
         .attr('dy',function(d,i) {return ys(i) + 20;})
         .text(function(d){return d.Game})
     
+
 }
 </script>
 </body>
