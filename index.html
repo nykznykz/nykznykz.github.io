@@ -1,4 +1,5 @@
 <script src='https://d3js.org/d3.v5.min.js'></script>
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
 <style>
 #tooltip {
     opacity: 0;
@@ -17,6 +18,204 @@
     </svg>
     <div id="tooltip" opacity=0></div>
 <script>
+const annotations = [
+                 {
+                    type: d3.annotationXYThreshold,
+                    note: {
+                        label: "League of Legends is the top game by a huge margin",
+                        title: "Domination",
+                        wrap: 500
+                    },subject: {
+                        x1: 590,
+                        x2: 620
+                    },
+                    x: 620,
+                    y: 130,
+                    dy: -40,
+                    dx: 20,
+                    className : "annotation2016"
+                },
+                {
+                    type: d3.annotationXYThreshold,
+                    note: {
+                        label: "Several smaller games that will be out of the top 10 by the next year",
+                        title: "Declining",
+                        wrap: 500
+                    },subject: {
+                        y1: 470,
+                        y2: 670
+                    },
+                    x: 370,
+                    y: 530,
+                    dy: -20,
+                    dx: 20,
+                    className : "annotation2016"
+                },
+                {
+                    type: d3.annotationXYThreshold,
+                    note: {
+                        label: "Playerunknown's Battlegrounds enters the market at #2, cannibalizing Counter-Strike's viewership and knocking it down to #4",
+                        title: "New Entrant",
+                        wrap: 500
+                    },
+                    subject: {
+                        x1: 470,
+                        x2: 540
+                    },
+                    x: 540,
+                    y: 180,
+                    dy: 30,
+                    dx: 40,
+                    className : "annotation2017"
+                },
+                {
+                    type: d3.annotationXYThreshold,
+                    note: {
+                        label: "Twitch experiments with allowing streamers to broadcast non-gaming related content, known as 'In real life' or IRL which would turn out to be a huge success",
+                        title: "A New Genre",
+                        wrap: 600
+                    },subject: {
+                        x1: 370,
+                        x2: 470
+                    },
+                    x: 470,
+                    y: 470,
+                    dy: -20,
+                    dx: 20,
+                    className : "annotation2017"
+                },
+                {
+                    type: d3.annotationXYThreshold,
+                    note: {
+                        label: "Fortnite achieves mainstream popularity, getting famous personalities like Drake and Travis Scott to play on stream and collaborating with Marvel's Avengers for in-game content.",
+                        title: "Explosive Growth",
+                        wrap: 400
+                    },subject: {
+                        x1: 690,
+                        x2: 720
+                    },
+                    x: 720,
+                    y: 120,
+                    dy: -20,
+                    dx: 20,
+                    className : "annotation2018"
+                },
+                {
+                    type: d3.annotationXYThreshold,
+                    note: {
+                        label: "Despite being the first Battle Royale game to enter the market, Playerunknown's Battlegrounds loses it's player & viewer base to it's more innovative competitors like Fortnite and Apex Legends. By the next year, it would fall off the top 10, never to return",
+                        title: "Fading into Obscurity",
+                        wrap: 400
+                    },subject: {
+                        x1: 430,
+                        x2: 460
+                    },
+                    x: 460,
+                    y: 350,
+                    dy: -20,
+                    dx: 20,
+                    className : "annotation2018"
+                },
+                {
+                    type: d3.annotationXYThreshold,
+                    note: {
+                        label: "Twitch rebrands it's IRL/Non-Gaming category into the Just Chatting category",
+                        title: "More IRL",
+                        wrap: 400
+                    },subject: {
+                        x1: 520,
+                        x2: 600
+                    },
+                    x: 600,
+                    y: 240,
+                    dy: -20,
+                    dx: 20,
+                    className : "annotation2019"
+                },
+                {
+                    type: d3.annotationXYThreshold,
+                    note: {
+                        label: "GTA V, a game on the market since 2013 received a resurgence in popularity thanks to a new game mode 'GTA Roleplay' which attracted many popular streamers to start playing.",
+                        title: "A Classic Revitalized",
+                        wrap: 500
+                    },subject: {
+                        x1: 470,
+                        x2: 540
+                    },
+                    x: 540,
+                    y: 300,
+                    dy: 20,
+                    dx: 20,
+                    className : "annotation2019"
+                },
+                {
+                    type: d3.annotationXYThreshold,
+                    note: {
+                        label: "Between 2019 and 2020 saw the rise of gaming and streaming culture, due to the Covid19 pandemic and people opting to stay home. Viewership rose across all gaming categories. Among Us in particular, became very popular as people could play with their friends over a video call.",
+                        title: "Pandemic led growth",
+                        wrap: 500
+                    },subject: {
+                        x1: 470,
+                        x2: 470
+                    },
+                    x: 640,
+                    y: 550,
+                    dy: 0,
+                    dx: 0,
+                    className : "annotation2020"
+                },
+                {
+                    type: d3.annotationXYThreshold,
+                    note: {
+                        label: "Valorant enters the market and manages to entice popular streamers to switch from Counter-Strike and Apex Legends",
+                        title: "Valorant, the Counter Strike Killer?",
+                        wrap: 500
+                    },subject: {
+                        x1: 470,
+                        x2: 470
+                    },
+                    x: 640,
+                    y: 250,
+                    dy: 0,
+                    dx: 0,
+                    className : "annotation2020"
+                },
+                {
+                    type: d3.annotationXYThreshold,
+                    note: {
+                        label: "Twitch Viewership continues its explosive growth, fueled by the pandemic. The Just Chatting category turned out to be a successful attempt at attracting non-gamers to the platform",
+                        title: "Continued Growth",
+                        wrap: 500
+                    },subject: {
+                        x1: 470,
+                        x2: 470
+                    },
+                    x: 640,
+                    y: 550,
+                    dy: 0,
+                    dx: 0,
+                    className : "annotation2021"
+                },
+                {
+                    type: d3.annotationXYThreshold,
+                    note: {
+                        label: "Warzone, the latest Battle Royale game to enter the market, competes with Fortnite and Apex Legends for viewership",
+                        title: "Battle of the Battle Royales",
+                        wrap: 500
+                    },subject: {
+                        x1: 600,
+                        x2: 640
+                    },
+                    x: 640,
+                    y: 350,
+                    dy: 20,
+                    dx: 0,
+                    className : "annotation2021"
+                }]
+
+
+    
+
 async function init() {
     data  = await d3.csv("https://nykznykz.github.io/twitch_data.csv");
     xdomain = [0,400000];
@@ -59,7 +258,6 @@ async function init() {
 
                 d3.select(this).attr("fill",  "blue")
                 select_year = Number(d)
-                console.log(select_year)
                 refresh_chart()
             })
     })
@@ -81,39 +279,28 @@ async function init() {
         .attr("transform","translate("+300+","+(700)+")")
         .call(d3.axisBottom(xs));
 
+    // Add annotation to the chart
+
+    const makeAnnotations = d3.annotation()
+            .annotations(annotations)
+        
+    d3.select("svg")
+        .append("g")
+        .call(makeAnnotations)
+
     select_year = 2016
     refresh_chart()
     
+
+
 
 }
 
 function refresh_chart(){
 
     d3.selectAll("#bar").remove()
-    d3.selectAll("#bar").remove()
     console.log(select_year)
     selected_data = data.filter(function(e){return (e.Year==select_year)})
-    console.log(selected_data)
-
-
-
-    // d3.select('#chart')
-    //     .selectAll('rect')
-    //     .data(selected_data)
-    //     .enter()
-    //     .append('rect')
-    //     .attr("id", "bar")
-    //     .attr('x',20)
-    //     .attr('y',function(d,i) {return ys(i);})
-    //     .attr('width',function(d,i) {return 100;})
-    //     .attr('height',10)
-    //     .attr('fill', "purple")
-    // d3.selectAll('#chart')
-    //     .selectAll('text')
-    //     .data(selected_data)
-    //     .enter()
-    //     .append("text")
-    //     .text(function(d){return d.Game})
 
     elem =  d3.select('#chart')
         .selectAll('rect')
@@ -144,6 +331,20 @@ function refresh_chart(){
         .attr('dy',function(d,i) {return ys(i) + 20;})
         .text(function(d){return d.Game})
     
+
+    
+    d3.selectAll(".annotation2016").attr("opacity",0);
+    d3.selectAll(".annotation2017").attr("opacity",0);
+    d3.selectAll(".annotation2018").attr("opacity",0)
+    d3.selectAll(".annotation2019").attr("opacity",0)
+    d3.selectAll(".annotation2020").attr("opacity",0)
+    d3.selectAll(".annotation2021").attr("opacity",0)
+    if(select_year==2016) d3.selectAll(".annotation2016").attr("opacity",1);
+    if(select_year==2017) d3.selectAll(".annotation2017").attr("opacity",1);
+    if(select_year==2018) d3.selectAll(".annotation2018").attr("opacity",1);
+    if(select_year==2019) d3.selectAll(".annotation2019").attr("opacity",1);
+    if(select_year==2020) d3.selectAll(".annotation2020").attr("opacity",1);
+    if(select_year==2021) d3.selectAll(".annotation2021").attr("opacity",1);
 
 }
 </script>
