@@ -11,7 +11,7 @@ async function init() {
     xdomain = [0,1000000];
     xrange = [0,3000];
     ydomain = [0,10];
-    yrange = [100,300];
+    yrange = [100,700];
     margin = 60
     xs = d3.scaleLinear().domain(xdomain).range(xrange);
     ys = d3.scaleLinear().domain(ydomain).range(yrange);
@@ -105,12 +105,12 @@ function refresh_chart(){
         .attr('x',20)
         .attr('y',function(d,i) {return ys(i);})
         .attr('width',function(d,i) {return xs(d.Avg_viewers);})
-        .attr('height',10)
-        .attr('fill', "purple")
+        .attr('height',30)
+        .attr('fill', "lightblue")
 
     elemEnter.append("text")
         .attr("dx", function(d){return 20})
-        .attr('dy',function(d,i) {return ys(i);})
+        .attr('dy',function(d,i) {return ys(i) + 20;})
         .text(function(d){return d.Game})
     
 }
